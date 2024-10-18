@@ -1,0 +1,51 @@
+Running with n = 1000000 and t = 8
+Running with ts = 2
+-1000
+1000
+339.958
+
+Running with ts = 4
+-1000
+1000
+189.501
+
+Running with ts = 8
+-1000
+1000
+115.66
+
+Running with ts = 16
+-1000
+1000
+93.7113
+
+Running with ts = 32
+-1000
+1000
+64.2051
+
+Running with ts = 64
+-1000
+1000
+58.3963
+
+Running with ts = 128
+-1000
+1000
+56.3557
+
+Running with ts = 256
+-1000
+1000
+54.2506
+
+Running with ts = 512
+-1000
+1000
+54.1427
+
+Running with ts = 1024
+-1000
+1000
+54.055
+
