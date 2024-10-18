@@ -59,7 +59,7 @@ int main(int argc, char *argv[]) {
 
     // Print the time taken to run the convolve function in milliseconds
     double time_taken = (end_time - start_time) * 1000.0; // Convert to milliseconds
-    std::cout << time_taken << " ms" << std::endl;
+    std::cout << time_taken << std::endl;
 
     // Clean up memory
     delete[] image;
