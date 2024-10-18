@@ -16,7 +16,7 @@ elif [ "$1" = "run" ]; then
   echo "Running with n = $n and t = $t"
   for ts in 2 4 8 16 32 64 128 256 512 1024; do
     echo "Running with ts = $ts"
-    ./task3 $n $t $ts >> task3_ts_times.txt  # Store the time output in a file
+    ./task3 $n $t $ts   # Store the time output in a file
     echo
   done
 
