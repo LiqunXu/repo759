@@ -21,6 +21,6 @@ with PdfPages("task1.pdf") as pdf:
 #            plt.text(x, y, y)
     plt.xlabel("Number of Threads")
     plt.ylabel("Time (milliseconds)")
-    plt.title("Scaling Analysis Plot")
+    plt.title("Task1")
     plt.xticks(xticks)
     pdf.savefig()
