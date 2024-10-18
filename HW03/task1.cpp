@@ -48,7 +48,7 @@ int main(int argc, char* argv[]) {
     std::cout << C[n * n - 1] << std::endl;
 
     // Print the time taken in milliseconds
-    std::cout << duration << " ms" << std::endl;
+    std::cout << duration << std::endl;
 
     return 0;
 }
