@@ -1,0 +1,101 @@
+Running with n = 1024
+Running with t = 1
+256.811
+260.524
+104
+
+Running with t = 2
+252.765
+241.385
+53
+
+Running with t = 3
+243.655
+249.212
+35
+
+Running with t = 4
+249.245
+257.769
+27
+
+Running with t = 5
+257.139
+258.19
+22
+
+Running with t = 6
+263.314
+248.195
+37
+
+Running with t = 7
+260.369
+266.952
+32
+
+Running with t = 8
+258.405
+249.767
+28
+
+Running with t = 9
+256.24
+249.511
+27
+
+Running with t = 10
+256.465
+259.924
+38
+
+Running with t = 11
+261.313
+263.352
+41
+
+Running with t = 12
+259.638
+261.776
+37
+
+Running with t = 13
+266.922
+259.247
+45
+
+Running with t = 14
+253.096
+247.222
+39
+
+Running with t = 15
+254.943
+246.286
+39
+
+Running with t = 16
+246.708
+259.442
+58
+
+Running with t = 17
+261.639
+264.327
+48
+
+Running with t = 18
+256.663
+259.847
+58
+
+Running with t = 19
+255.901
+263.158
+60
+
+Running with t = 20
+262.558
+237.454
+38
+
