@@ -15,7 +15,7 @@ elif [ "$1" = "run" ]; then
   echo "Running with n = $n"
   for t in {1..20}; do
     echo "Running with t = $t"
-    ./task1 $n $t >> task1_times.txt  # Store the time output in a file
+    ./task1 $n $t  
     echo
   done
 
