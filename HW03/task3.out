@@ -2,100 +2,100 @@ Running with n = 1000000 and 1024
 Running with t = 1
 -1000
 1000
-98.1033
+55.2012
 
 Running with t = 2
 -1000
 1000
-50.8373
+29.9646
 
 Running with t = 3
 -1000
 1000
-51.6274
+29.598
 
 Running with t = 4
 -1000
 1000
-51.507
+23.2708
 
 Running with t = 5
 -1000
 1000
-52.2318
+23.2194
 
 Running with t = 6
 -1000
 1000
-52.0381
+19.6662
 
 Running with t = 7
 -1000
 1000
-51.6046
+18.7265
 
 Running with t = 8
 -1000
 1000
-51.9781
+18.1258
 
 Running with t = 9
 -1000
 1000
-51.7475
+19.8878
 
 Running with t = 10
 -1000
 1000
-55.749
+27.7857
 
 Running with t = 11
 -1000
 1000
-62.7757
+26.0608
 
 Running with t = 12
 -1000
 1000
-61.8372
+31.613
 
 Running with t = 13
 -1000
 1000
-61.4621
+19.3734
 
 Running with t = 14
 -1000
 1000
-60.4534
+29.1384
 
 Running with t = 15
 -1000
 1000
-77.594
+24.9691
 
 Running with t = 16
 -1000
 1000
-66.7994
+27.1353
 
 Running with t = 17
 -1000
 1000
-63.6842
+20.399
 
 Running with t = 18
 -1000
 1000
-64.4053
+25.1908
 
 Running with t = 19
 -1000
 1000
-66.1751
+31.2524
 
 Running with t = 20
 -1000
 1000
-65.1693
+32.6276
 
