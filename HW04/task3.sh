@@ -7,7 +7,7 @@
 #SBATCH --time=01:00:00
 
 if [ "$1" = "compile" ]; then
-  g++ task3.cpp -Wall -O3 -std=c++17 -fopenmp -o task3
+  g++ task3.cpp -Wall -O3 -std=c++17 -o task3 -fopenmp
 elif [ "$1" = "run" ]; then
   particles=100
   end_time=100.0
