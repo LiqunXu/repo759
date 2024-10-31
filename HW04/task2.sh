@@ -8,8 +8,8 @@
 if [ "$1" = "compile" ]; then
   g++ task2.cpp -Wall -O3 -std=c++17 -o task2
 elif [ "$1" = "run" ]; then
-  echo "Running with number of particles simulation end time"
-  ./task2 100 10
+  echo "Running with number of particles and simulation end time" >> task2.out
+  ./task2 100 10 >> task2.out 2>&1
 elif [ "$1" = "clean" ]; then
   rm -f task2 task2.err task2.out task2.pdf
 else
