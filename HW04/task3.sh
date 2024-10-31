@@ -13,5 +13,5 @@ elif [ "$1" = "run" ]; then
 elif [ "$1" = "clean" ]; then
   rm -f task3 task3.err task3.out task3.pdf
 else
-  echo "./task1.sh [compile | run | clean]"
+  echo "./task3.sh [compile | run | clean]"
 fi
