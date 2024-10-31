@@ -1,16 +1,21 @@
 #!/usr/bin/env bash
-#SBATCH -p instruction
-#SBATCH -J task3
-#SBATCH -o task3.out -e task3.err
+
+#SBATCH --job-name=nbody_experiment
+#SBATCH --output=nbody_%j.out
+#SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
+#SBATCH --time=01:00:00
 
 if [ "$1" = "compile" ]; then
-  g++ task3.cpp -Wall -O3 -std=c++17 -o task3 -fopenmp
+  g++ task3.cpp -Wall -O3 -std=c++17 -fopenmp -o task3
 elif [ "$1" = "run" ]; then
-  echo "Running with number of particles, simulation end time, num thread" >> task3.out
-  ./task3 100 100 8 >> task3.out 2>&1
-elif [ "$1" = "clean" ]; then
-  rm -f task3 task3.err task3.out task3.pdf
-else
-  echo "./task3.sh [compile | run | clean]"
+  particles=100
+  end_time=100.0
+  executable=task3
+  for schedule in static dynamic guided; do
+      for threads in {1..8}; do
+          echo "Running with $threads threads and $schedule scheduling"
+          ./$executable $particles $end_time $threads $schedule
+      done
+  done
 fi
