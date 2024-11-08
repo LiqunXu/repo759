@@ -2,7 +2,7 @@
 #SBATCH --job-name=task2
 #SBATCH -p instruction
 #SBATCH --ntasks=1 --cpus-per-task=2
-#SBATCH --time=0-00:10:00
+#SBATCH --time=0-00:30:00
 #SBATCH --output="task2.out"
 #SBATCH --error="task2.err"
 
