@@ -18,7 +18,7 @@ int main() {
 
     // Generate a random integer for 'a'
     int a = rand() % 10 + 1; // Random number between 1 and 10
-    printf("Random a: %d\n", a);
+
 
     // Launch kernel with 2 blocks, 8 threads each
     computeArray<<<2, 8>>>(dA, a);
@@ -35,11 +35,12 @@ int main() {
     cudaMemcpy(hA, dA, numElements * sizeof(int), cudaMemcpyDeviceToHost);
 
     // Print the result
-    printf("Result array: ");
+
     for (int i = 0; i < numElements; ++i) {
         printf("%d ", hA[i]);
+        printf("\n");
     }
-    printf("\n");
+
 
     // Free device memory
     cudaFree(dA);
