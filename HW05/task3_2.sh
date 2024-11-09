@@ -2,7 +2,7 @@
 #SBATCH --job-name=task3_batch
 #SBATCH -p instruction
 #SBATCH --ntasks=1 --cpus-per-task=2
-#SBATCH --time=0-03:00:00   # Set sufficient time for all runs
+#SBATCH --time=0-01:00:00   # Set sufficient time for all runs
 #SBATCH --output="task3_batch.out"
 #SBATCH --error="task3_batch.err"
 
