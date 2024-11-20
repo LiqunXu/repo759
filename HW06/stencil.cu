@@ -1,15 +1,15 @@
 #include <cuda_runtime.h>
 #include "stencil.cuh"
 
-__global__ void stencil_kernel(const float *image, const float *mask, float *output, int n, int R) {
+__global__ void stencil_kernel(const float *image, const float *mask, float *output, unsigned int n, unsigned int R) {
     extern __shared__ float shared_memory[];
 
     // Pointers for shared memory
     float *shared_image = shared_memory;
     float *shared_mask = shared_memory + blockDim.x + 2 * R;
 
-    int global_idx = blockIdx.x * blockDim.x + threadIdx.x;
-    int local_idx = threadIdx.x;
+    unsigned int global_idx = blockIdx.x * blockDim.x + threadIdx.x;
+    unsigned int local_idx = threadIdx.x;
 
     // Load mask into shared memory (only once per block)
     if (local_idx < 2 * R + 1) {
@@ -24,7 +24,7 @@ __global__ void stencil_kernel(const float *image, const float *mask, float *out
         // Load left boundary
         shared_image[local_idx] = (global_idx >= R) ? image[global_idx - R] : 1.0f;
         // Load right boundary
-        int right_idx = global_idx + blockDim.x;
+        unsigned int right_idx = global_idx + blockDim.x;
         shared_image[R + blockDim.x + local_idx] = (right_idx < n) ? image[right_idx] : 1.0f;
     }
 
@@ -33,14 +33,14 @@ __global__ void stencil_kernel(const float *image, const float *mask, float *out
     // Perform convolution
     if (global_idx < n) {
         float result = 0.0f;
-        for (int j = -R; j <= R; ++j) {
+        for (int j = -static_cast<int>(R); j <= static_cast<int>(R); ++j) {
             result += shared_image[R + local_idx + j] * shared_mask[j + R];
         }
         output[global_idx] = result;
     }
 }
 
-void stencil(const float *image, const float *mask, float *output, int n, int R, int threads_per_block) {
+void stencil(const float *image, const float *mask, float *output, unsigned int n, unsigned int R, unsigned int threads_per_block) {
     float *d_image, *d_mask, *d_output;
 
     // Allocate device memory

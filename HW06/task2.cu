@@ -4,8 +4,8 @@
 #include "stencil.cuh"
 
 // Function to fill an array with random values in the range [-1, 1]
-void fillArray(float* array, int size) {
-    for (int i = 0; i < size; i++) {
+void fillArray(float* array, unsigned int size) {
+    for (unsigned int i = 0; i < size; i++) {
         array[i] = static_cast<float>(rand()) / RAND_MAX * 2.0f - 1.0f;
     }
 }
@@ -17,9 +17,9 @@ int main(int argc, char** argv) {
     }
 
     // Parse command-line arguments
-    int n = std::atoi(argv[1]);
-    int R = std::atoi(argv[2]);
-    int threads_per_block = std::atoi(argv[3]);
+    unsigned int n = static_cast<unsigned int>(std::atoi(argv[1]));
+    unsigned int R = static_cast<unsigned int>(std::atoi(argv[2]));
+    unsigned int threads_per_block = static_cast<unsigned int>(std::atoi(argv[3]));
 
     if (n <= 0 || R <= 0 || threads_per_block <= 0) {
         std::cerr << "All input parameters must be positive integers.\n";
