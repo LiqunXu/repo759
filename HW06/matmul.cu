@@ -2,7 +2,7 @@
 #include "matmul.cuh"
 
 // CUDA kernel for matrix multiplication
-__global__ void matmul_kernel(const float *A, const float *B, float *C, int n) {
+__global__ void matmul_kernel(const float *A, const float *B, float *C, size_t n) {
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int col = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -16,7 +16,7 @@ __global__ void matmul_kernel(const float *A, const float *B, float *C, int n) {
 }
 
 // Host function for matrix multiplication
-void matmul(const float *A, const float *B, float *C, int n, int threads_per_block) {
+void matmul(const float *A, const float *B, float *C, size_t n, unsigned int threads_per_block) {
     float *d_A, *d_B, *d_C;
 
     // Allocate device memory
