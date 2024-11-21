@@ -7,7 +7,7 @@
 #SBATCH --error="task1.err"
 
 #SBATCH --gres=gpu:1
-
+module purge
 module load nvidia/cuda/11.8.0
 module load gcc/11.3.0
 
