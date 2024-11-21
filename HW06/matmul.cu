@@ -1,45 +1,41 @@
-#include <cuda_runtime.h>
 #include "matmul.cuh"
+#include <cuda_runtime.h>
+//#include <cstdio>
+#include <iostream>
 
-// CUDA kernel for matrix multiplication
-__global__ void matmul_kernel(const float *A, const float *B, float *C, size_t n) {
-    int row = blockIdx.y * blockDim.y + threadIdx.y;
-    int col = blockIdx.x * blockDim.x + threadIdx.x;
+__global__ void matmul_kernel(const float* A, const float* B, float* C, size_t n) {
+    size_t pos = blockIdx.x * blockDim.x + threadIdx.x;
+    size_t size = n * n;
 
-    if (row < n && col < n) {
-        float value = 0.0f;
-        for (int i = 0; i < n; i++) {
-            value += A[row * n + i] * B[i * n + col];
+    if (pos < size) {
+	float value = 0.0f;
+	int r = pos / n;
+	int c = pos % n;
+        for (size_t k = 0; k < n; k++) {
+            value += A[r * n + k] * B[k * n + c];
         }
-        C[row * n + col] = value;
+        C[r * n + c] = value;
     }
-}
+}	
 
-// Host function for matrix multiplication
-void matmul(const float *A, const float *B, float *C, size_t n, unsigned int threads_per_block) {
+void matmul(const float* A, const float* B, float* C, size_t n, unsigned int threads_per_block) {
+
+    size_t num_block = (threads_per_block - 1 + n * n) / threads_per_block;
+
     float *d_A, *d_B, *d_C;
-
-    // Allocate device memory
-    cudaMalloc(&d_A, n * n * sizeof(float));
-    cudaMalloc(&d_B, n * n * sizeof(float));
-    cudaMalloc(&d_C, n * n * sizeof(float));
-
-    // Copy data from host to device
+    cudaMalloc((void**)&d_A, n * n * sizeof(float));
+    cudaMalloc((void**)&d_B, n * n * sizeof(float));
+    cudaMalloc((void**)&d_C, n * n * sizeof(float));
+	
     cudaMemcpy(d_A, A, n * n * sizeof(float), cudaMemcpyHostToDevice);
     cudaMemcpy(d_B, B, n * n * sizeof(float), cudaMemcpyHostToDevice);
+    cudaMemset(d_C, 0, n*n*sizeof(float));
 
-    // Define block and grid dimensions
-    dim3 threads(threads_per_block, threads_per_block);
-    dim3 blocks((n + threads_per_block - 1) / threads_per_block,
-                (n + threads_per_block - 1) / threads_per_block);
-
-    // Launch the kernel
-    matmul_kernel<<<blocks, threads>>>(d_A, d_B, d_C, n);
-
-    // Copy the result back to the host
+    matmul_kernel<<<num_block, threads_per_block>>>(d_A, d_B, d_C, n);
+    cudaDeviceSynchronize();
+    
     cudaMemcpy(C, d_C, n * n * sizeof(float), cudaMemcpyDeviceToHost);
 
-    // Free device memory
     cudaFree(d_A);
     cudaFree(d_B);
     cudaFree(d_C);

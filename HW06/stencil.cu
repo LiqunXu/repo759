@@ -1,70 +1,83 @@
-#include <cuda_runtime.h>
 #include "stencil.cuh"
+#include <cuda_runtime.h>
+#include <cstdio>
 
-__global__ void stencil_kernel(const float *image, const float *mask, float *output, unsigned int n, unsigned int R) {
-    extern __shared__ float shared_memory[];
+#include "stencil.cuh"
+#include <cuda_runtime.h>
+#include <cstdio>
 
-    // Pointers for shared memory
-    float *shared_image = shared_memory;
-    float *shared_mask = shared_memory + blockDim.x + 2 * R;
+__global__ void stencil_kernel(const float* image, const float* mask, float* output, unsigned int n, unsigned int R) {
+    extern __shared__ float shared[];
 
-    unsigned int global_idx = blockIdx.x * blockDim.x + threadIdx.x;
-    unsigned int local_idx = threadIdx.x;
+    float* shared_image = shared;
+    float* shared_mask = &shared[blockDim.x + 2 * R];
+    float* shared_output = &shared[blockDim.x + 2 * R + (2 * R + 1)];
+    
+    unsigned int tid = threadIdx.x;
+    unsigned int global_index = blockIdx.x * blockDim.x + tid;
 
-    // Load mask into shared memory (only once per block)
-    if (local_idx < 2 * R + 1) {
-        shared_mask[local_idx] = mask[local_idx];
+    if (tid < 2 * R + 1) {
+        shared_mask[tid] = mask[tid];
     }
 
-    // Load image into shared memory (with ghost elements for the boundary)
-    if (global_idx < n) {
-        shared_image[R + local_idx] = image[global_idx];
+    if (global_index < n) {
+        shared_image[tid + R] = image[global_index];
+    } else {
+        shared_image[tid + R] = 1.0f;
     }
-    if (local_idx < R) {
-        // Load left boundary
-        shared_image[local_idx] = (global_idx >= R) ? image[global_idx - R] : 1.0f;
-        // Load right boundary
-        unsigned int right_idx = global_idx + blockDim.x;
-        shared_image[R + blockDim.x + local_idx] = (right_idx < n) ? image[right_idx] : 1.0f;
+
+    if (tid < R) {
+        unsigned int left_index = global_index < R ? 0 : global_index - R;
+        shared_image[tid] = (global_index < R) ? 1.0f : image[left_index];
+    }
+
+    if (tid >= blockDim.x - R) {
+        unsigned int right_index = global_index + R >= n ? n - 1 : global_index + R;
+        shared_image[tid + 2 * R] = (global_index + R >= n) ? 1.0f : image[right_index];
     }
 
     __syncthreads();
-
-    // Perform convolution
-    if (global_idx < n) {
+    
+    float temp_R = (float)R;
+    if (global_index < n) {
         float result = 0.0f;
-        for (int j = -static_cast<int>(R); j <= static_cast<int>(R); ++j) {
-            result += shared_image[R + local_idx + j] * shared_mask[j + R];
+        for (int j = -temp_R; j <= temp_R; ++j) {
+            result += shared_image[tid + R + j] * shared_mask[j + R];
         }
-        output[global_idx] = result;
+        shared_output[tid] = result;
+    }
+
+    __syncthreads();
+    
+    if (global_index < n) {
+        output[global_index] = shared_output[tid];
     }
 }
 
-void stencil(const float *image, const float *mask, float *output, unsigned int n, unsigned int R, unsigned int threads_per_block) {
+void stencil(const float* image, const float* mask, float* output, unsigned int n, unsigned int R, unsigned int threads_per_block) {
     float *d_image, *d_mask, *d_output;
+    cudaMalloc((void**)&d_image, n * sizeof(float));
+    cudaMalloc((void**)&d_mask, (2 * R + 1) * sizeof(float));
+    cudaMalloc((void**)&d_output, n * sizeof(float));
 
-    // Allocate device memory
-    cudaMalloc(&d_image, n * sizeof(float));
-    cudaMalloc(&d_mask, (2 * R + 1) * sizeof(float));
-    cudaMalloc(&d_output, n * sizeof(float));
-
-    // Copy data from host to device
     cudaMemcpy(d_image, image, n * sizeof(float), cudaMemcpyHostToDevice);
     cudaMemcpy(d_mask, mask, (2 * R + 1) * sizeof(float), cudaMemcpyHostToDevice);
 
-    // Configure kernel launch parameters
-    dim3 threads(threads_per_block);
-    dim3 blocks((n + threads_per_block - 1) / threads_per_block);
-    size_t shared_memory_size = (threads_per_block + 2 * R) * sizeof(float) + (2 * R + 1) * sizeof(float);
+    dim3 block_dim(threads_per_block);
+    dim3 grid_dim((n + threads_per_block - 1) / threads_per_block);
 
-    // Launch the kernel
-    stencil_kernel<<<blocks, threads, shared_memory_size>>>(d_image, d_mask, d_output, n, R);
+    size_t shared_mem_size = (threads_per_block + 2 * R) * sizeof(float) +  // For shared_image
+                         (2 * R + 1) * sizeof(float) +                 // For shared_mask
+                         threads_per_block * sizeof(float);
+    
+    stencil_kernel<<<grid_dim, block_dim, shared_mem_size>>>(d_image, d_mask, d_output, n, R);
 
-    // Copy the result back to the host
+    cudaDeviceSynchronize();
+
     cudaMemcpy(output, d_output, n * sizeof(float), cudaMemcpyDeviceToHost);
 
-    // Free device memory
     cudaFree(d_image);
     cudaFree(d_mask);
     cudaFree(d_output);
 }
+
