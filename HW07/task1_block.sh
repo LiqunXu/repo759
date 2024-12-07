@@ -20,6 +20,6 @@ nvcc task1.cu matmul.cu -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std=c++17 -
 n=16384
 
 # Avoid invalid characters in loops and optimize resource usage
-for block in {4..12}; do
+for block in {12..24}; do
     ./task1 $n $block
 done
