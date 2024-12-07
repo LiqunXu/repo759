@@ -15,7 +15,7 @@ module load nvidia/cuda/11.8.0
 nvcc task1.cu matmul.cu -Xcompiler -O3 -Xcompiler -Wall -Xptxas -O3 -std=c++17 -o task1
 
 # Parameters
-n=16384
+n=384
 
 # Avoid invalid characters in loops and optimize resource usage
 for block in {4..12}; do
