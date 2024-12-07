@@ -3,7 +3,7 @@
 #SBATCH -p instruction
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=2
-#SBATCH --time=0-00:30:00
+#SBATCH --time=0-00:40:00
 #SBATCH --output="task2.out"
 #SBATCH --error="task2.err"
 #SBATCH --gres=gpu:1
