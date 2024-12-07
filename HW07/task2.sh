@@ -3,11 +3,11 @@
 #SBATCH -p instruction
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=2
-#SBATCH --time=0-00:20:00
+#SBATCH --time=0-00:30:00
 #SBATCH --output="task2.out"
 #SBATCH --error="task2.err"
-#SBATCH --gres=gpu:4
-#SBATCH --mem=32G
+#SBATCH --gres=gpu:1
+#SBATCH --mem=64G
 
 
 module purge
