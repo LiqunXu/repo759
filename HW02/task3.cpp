@@ -11,7 +11,7 @@ using std::chrono::high_resolution_clock;
 using std::chrono::duration;
 
 int main() {
-    const unsigned int n = 1024; // Size of matrices (at least 1000x1000)
+    const unsigned int n = 2**14; // Size of matrices (at least 1000x1000)
 
     // Allocate memory for matrices A, B, and C
     std::vector<double> A(n * n), B(n * n);
