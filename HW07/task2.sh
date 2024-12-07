@@ -6,8 +6,8 @@
 #SBATCH --time=0-00:40:00
 #SBATCH --output="task2.out"
 #SBATCH --error="task2.err"
-#SBATCH --gres=gpu:1
-#SBATCH --mem=64G
+#SBATCH --gres=gpu:4
+#SBATCH --mem=128G
 
 
 module purge
